@@ -16,6 +16,13 @@ from .serializers import UserRegistrationSerializer, UserSerializer, UserProfile
 from rest_framework.permissions import IsAuthenticated
 from .models import Profile
 
+from django.http import JsonResponse
+# from django.views.decorators.csrf import csrf_exempt
+import json
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+
+
 
 # Create your views here.
 
@@ -107,9 +114,119 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
 
-        
+
+#Chat GPT generated function
+# def your_view_function(request):
+#     if request.method == 'POST':
+#         try:
+#             # 3. Parse JSON data
+#             data = json.loads(request.body)
+#             # 4. Process data (example: echo back the received data)
+#             response_data = {'received_data': data}
+#             # 5. Return JSON response
+#             return JsonResponse(response_data, status=200)
+#         except json.JSONDecodeError:
+#             return JsonResponse({'error': 'Invalid JSON'}, status=400)
+#     else:
+#         return JsonResponse({'error': 'Method not allowed'}, status=405)    
+    
+# def signup(request):
+#     if request.method == 'POST':
+#         try:
+#             # 3. Parse JSON data
+#             data = json.loads(request.body)
+#             username = data.get('username')
+#             email = data.get('email')
+#             password = data.get('password')
+            
+#             # 4. Validate data
+#             if not username or not email or not password:
+#                 return JsonResponse({'error': 'Username, email, and password are required'}, status=400)
+            
+#             # 5. Check if user already exists
+#             if User.objects.filter(username=username).exists():
+#                 return JsonResponse({'error': 'Username already exists'}, status=400)
+            
+#             # 6. Create user
+#             user = User.objects.create_user(username=username, email=email, password=password)
+            
+#             # 7. Return success response
+#             return JsonResponse({'success': 'User created successfully'}, status=201)
+#         except json.JSONDecodeError:
+#             return JsonResponse({'error': 'Invalid JSON'}, status=400)
+#     else:
+#         return JsonResponse({'error': 'Method not allowed'}, status=405)
+    
+def login_user(request):
+    if request.method == 'POST':
+        try:
+            # 3. Parse JSON data
+            data = json.loads(request.body)
+            username = data.get('email')
+            password = data.get('password')
+            
+            # 4. Authenticate user
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                return JsonResponse({'success': 'Login successful'}, status=200)
+            else:
+                return JsonResponse({'error': 'Invalid credentials'}, status=401)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)    
+
+
+# def update_password(request):
+#     if request.method == 'PUT':
+#         try:
+#             # 3. Parse JSON data
+#             data = json.loads(request.body)
+#             username = data.get('username')
+#             password = data.get('password')
+#             new_password = data.get('new_password')
+            
+#             # 4. Authenticate user
+#             user = authenticate(username=username, password=password)
+#             if user is not None:
+#                 # 5. Update password
+#                 user.set_password(new_password)
+#                 user.save()
+#                 return JsonResponse({'success': 'Password updated successfully'}, status=200)
+#             else:
+#                 return JsonResponse({'error': 'Invalid credentials'}, status=401)
+#         except json.JSONDecodeError:
+#             return JsonResponse({'error': 'Invalid JSON'}, status=400)
+#     else:
+#         return JsonResponse({'error': 'Method not allowed'}, status=405)
+    
+# def update_name(request):
+#     if request.method == 'PUT':
+#         try:
+#             # 3. Parse JSON data
+#             data = json.loads(request.body)
+#             username = data.get('username')
+#             password = data.get('password')
+#             new_name = data.get('new_name')
+            
+#             # 4. Authenticate user
+#             user = authenticate(username=username, password=password)
+#             if user is not None:
+#                 # 5. Update name
+#                 user.first_name = new_name
+#                 user.save()
+#                 return JsonResponse({'success': 'Name updated successfully'}, status=200)
+#             else:
+#                 return JsonResponse({'error': 'Invalid credentials'}, status=401)
+#         except json.JSONDecodeError:
+#             return JsonResponse({'error': 'Invalid JSON'}, status=400)
+#     else:
+#         return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+
+# chat gpt generated code end**
+    
 # class ApiUserProfileView(APIView):
 #     permission_classes =[IsAuthenticated,]
 
